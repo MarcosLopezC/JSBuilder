@@ -30,6 +30,11 @@ namespace JSBuilder
 		{
 			var context = new Context();
 
+			if (!Path.IsPathRooted(path))
+			{
+				path = Path.GetFullPath(path);
+			}
+
 			BuildFile(path, context);
 
 			var output = string.Join("\n", context.ProcessedLines);
@@ -53,8 +58,13 @@ namespace JSBuilder
 
 					if (!Path.IsPathRooted(requiredFile))
 					{
-						var currentDirectory = Path.GetPathRoot(path);
+						var currentDirectory = Path.GetDirectoryName(path);
 						requiredFile = Path.Combine(currentDirectory, requiredFile);
+					}
+
+					if (context.IncludedFiles.Contains(requiredFile))
+					{
+						continue;
 					}
 
 					if (File.Exists(requiredFile))
