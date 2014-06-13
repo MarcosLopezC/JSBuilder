@@ -43,6 +43,8 @@ namespace JSBuilder
 			try
 			{
 				File.WriteAllText(outputPath, result.Output, Encoding.UTF8);
+
+				Console.WriteLine("Build completed successfully.");
 			}
 			catch (PathTooLongException)
 			{
