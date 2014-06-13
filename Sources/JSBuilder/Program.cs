@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace JSBuilder
 {
@@ -31,7 +32,11 @@ namespace JSBuilder
 				Environment.Exit(InvalidArgumentsCode);
 			}
 
+			var stopwatch = new Stopwatch();
+
+			stopwatch.Start();
 			var result = Builder.BuildFile(inputPath);
+			stopwatch.Stop();
 
 			foreach (var error in result.Errors)
 			{
@@ -44,7 +49,7 @@ namespace JSBuilder
 			{
 				File.WriteAllText(outputPath, result.Output, Encoding.UTF8);
 
-				Console.WriteLine("Build completed successfully.");
+				Console.WriteLine("Build completed successfully. ({0}ms)", stopwatch.ElapsedMilliseconds);
 			}
 			catch (PathTooLongException)
 			{
